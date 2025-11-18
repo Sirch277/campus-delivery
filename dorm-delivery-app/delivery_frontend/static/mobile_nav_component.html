@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .mobile-nav-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: none;
+            justify-content: space-around;
+            padding: 8px 4px;
+            border-top: 1px solid #e0e0e0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 12px;
+            border: none;
+            background: none;
+            border-radius: 12px;
+            min-height: 44px;
+            min-width: 60px;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            max-width: 80px;
+        }
+
+        .mobile-nav-item.active {
+            color: #1E90FF;
+            background-color: #F0F8FF;
+        }
+
+        .mobile-nav-item:active {
+            background-color: #f0f0f0;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav-container {
+                display: flex;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-nav-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-nav-container" id="mobileNav">
+        <button class="mobile-nav-item" data-page="Dashboard">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </button>
+        <button class="mobile-nav-item" data-page="Create Delivery">
+            <span class="nav-icon">📦</span>
+            <span>Create</span>
+        </button>
+        <button class="mobile-nav-item" data-page="Track Delivery">
+            <span class="nav-icon">🚚</span>
+            <span>Track</span>
+        </button>
+        <button class="mobile-nav-item" data-page="Order History">
+            <span class="nav-icon">📋</span>
+            <span>History</span>
+        </button>
+    </div>
+
+    <script>
+        // Set active state based on URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentPage = urlParams.get('page') || 'Dashboard';
+        
+        // Update active states
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            if (item.dataset.page === currentPage) {
+                item.classList.add('active');
+            }
+        });
+
+        // Handle navigation clicks
+        document.querySelectorAll('.mobile-nav-item').forEach(button => {
+            button.addEventListener('click', function() {
+                const page = this.dataset.page;
+                
+                // Send message to Streamlit
+                window.parent.postMessage({
+                    type: 'MOBILE_NAV_CLICK',
+                    page: page
+                }, '*');
+            });
+        });
+    </script>
+</body>
+</html>

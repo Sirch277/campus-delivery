@@ -1,0 +1,395 @@
+<!-- Global Navigation System -->
+<div id="global-navigation" data-role="CURRENT_ROLE">
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+      <div class="nav-items-container" id="mobileNavItems">
+        <!-- Mobile nav items will be populated by JavaScript -->
+      </div>
+    </nav>
+  
+    <!-- Mobile Burger Menu Button -->
+    <button class="mobile-burger-btn" id="mobileBurgerBtn" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  
+    <!-- Mobile Sidebar Overlay -->
+    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+  
+    <!-- Mobile Sidebar -->
+    <aside class="mobile-sidebar" id="mobileSidebar">
+      <div class="sidebar-header">
+        <h3>🧭 Navigation</h3>
+        <button class="close-sidebar" id="closeSidebarBtn" aria-label="Close menu">×</button>
+      </div>
+      <nav class="sidebar-nav" id="mobileSidebarNav">
+        <!-- Mobile sidebar items will be populated by JavaScript -->
+      </nav>
+    </aside>
+  </div>
+  
+  <style>
+  /* Global Navigation Styles */
+  #global-navigation {
+    position: relative;
+    /* Base styles that apply to all navigation elements */
+  }
+  
+  /* Mobile Bottom Navigation */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: none;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 4px;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9998;
+    backdrop-filter: blur(10px);
+  }
+  
+  .nav-items-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+  }
+  
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #666;
+    padding: 8px 12px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    min-width: 60px;
+    min-height: 44px;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    flex: 1;
+    max-width: 80px;
+  }
+  
+  .mobile-nav-item.active {
+    color: #1E90FF;
+    background-color: #F0F8FF;
+  }
+  
+  .mobile-nav-item:active {
+    background-color: #f0f0f0;
+  }
+  
+  .nav-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+  
+  /* Mobile Burger Menu */
+  .mobile-burger-btn {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    background: #1E90FF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  .mobile-burger-btn span {
+    width: 20px;
+    height: 2px;
+    background: white;
+    transition: 0.3s;
+  }
+  
+  /* Mobile Sidebar */
+  .mobile-sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: none;
+  }
+  
+  .mobile-sidebar-overlay.active {
+    display: block;
+  }
+  
+  .mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 10001;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+  
+  .mobile-sidebar.active {
+    left: 0;
+  }
+  
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .sidebar-header h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .close-sidebar {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sidebar-nav {
+    padding: 20px;
+  }
+  
+  .sidebar-nav-item {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    margin: 8px 0;
+    background: none;
+    border: none;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    transition: background-color 0.2s ease;
+  }
+  
+  .sidebar-nav-item.active {
+    background-color: #1E90FF;
+    color: white;
+  }
+  
+  .sidebar-nav-item:active {
+    background-color: #f0f0f0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .mobile-bottom-nav {
+      display: flex;
+    }
+    
+    .mobile-burger-btn {
+      display: flex;
+    }
+    
+    /* Hide Streamlit's default sidebar on mobile */
+    section[data-testid="stSidebar"] {
+      display: none !important;
+    }
+    
+    /* Add padding to main content for bottom nav */
+    .main .block-container {
+      padding-bottom: 80px !important;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .mobile-bottom-nav,
+    .mobile-burger-btn,
+    .mobile-sidebar-overlay,
+    .mobile-sidebar {
+      display: none !important;
+    }
+  }
+  </style>
+  
+  <script>
+  // Menu configurations
+  const menuConfigs = {
+    customer: [
+      { icon: '🏠', label: 'Dashboard', page: 'Dashboard' },
+      { icon: '📦', label: 'Create', page: 'Create Delivery' },
+      { icon: '🚚', label: 'Track', page: 'Track Delivery' },
+      { icon: '📋', label: 'History', page: 'Order History' }
+    ],
+    rider: [
+      { icon: '🏠', label: 'Dashboard', page: 'Dashboard' },
+      { icon: '📦', label: 'Tasks', page: 'Available Tasks' },
+      { icon: '🚚', label: 'Deliveries', page: 'My Deliveries' },
+      { icon: '💰', label: 'Earnings', page: 'Earnings' },
+      { icon: '📅', label: 'Schedule', page: 'Schedule Setup' }
+    ]
+  };
+  
+  class GlobalNavigation {
+    constructor() {
+      this.role = document.getElementById('global-navigation').dataset.role.toLowerCase();
+      this.currentPage = this.getCurrentPage();
+      this.init();
+    }
+  
+    init() {
+      this.renderMobileBottomNav();
+      this.renderMobileSidebar();
+      this.attachEventListeners();
+      this.setActiveStates();
+    }
+  
+    getCurrentPage() {
+      // Try to get current page from Streamlit session state
+      // This will be updated by the Python side
+      return 'Dashboard'; // Default page
+    }
+  
+    renderMobileBottomNav() {
+      const container = document.getElementById('mobileNavItems');
+      const menuItems = menuConfigs[this.role] || [];
+      
+      container.innerHTML = menuItems.map(item => `
+        <button class="mobile-nav-item ${this.currentPage === item.page ? 'active' : ''}" 
+                data-page="${item.page}">
+          <span class="nav-icon">${item.icon}</span>
+          <span>${item.label}</span>
+        </button>
+      `).join('');
+    }
+  
+    renderMobileSidebar() {
+      const container = document.getElementById('mobileSidebarNav');
+      const menuItems = menuConfigs[this.role] || [];
+      
+      container.innerHTML = menuItems.map(item => `
+        <button class="sidebar-nav-item ${this.currentPage === item.page ? 'active' : ''}" 
+                data-page="${item.page}">
+          ${item.icon} ${item.label}
+        </button>
+      `).join('');
+    }
+  
+    attachEventListeners() {
+      // Mobile bottom nav clicks
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.mobile-nav-item')) {
+          const button = e.target.closest('.mobile-nav-item');
+          const page = button.dataset.page;
+          this.navigateToPage(page);
+        }
+      });
+  
+      // Mobile sidebar nav clicks
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.sidebar-nav-item')) {
+          const button = e.target.closest('.sidebar-nav-item');
+          const page = button.dataset.page;
+          this.navigateToPage(page);
+          this.closeMobileSidebar();
+        }
+      });
+  
+      // Burger menu
+      document.getElementById('mobileBurgerBtn').addEventListener('click', () => {
+        this.openMobileSidebar();
+      });
+  
+      // Close sidebar
+      document.getElementById('closeSidebarBtn').addEventListener('click', () => {
+        this.closeMobileSidebar();
+      });
+  
+      document.getElementById('mobileSidebarOverlay').addEventListener('click', () => {
+        this.closeMobileSidebar();
+      });
+  
+      // Keyboard events
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.closeMobileSidebar();
+        }
+      });
+    }
+  
+    openMobileSidebar() {
+      document.getElementById('mobileSidebar').classList.add('active');
+      document.getElementById('mobileSidebarOverlay').classList.add('active');
+    }
+  
+    closeMobileSidebar() {
+      document.getElementById('mobileSidebar').classList.remove('active');
+      document.getElementById('mobileSidebarOverlay').classList.remove('active');
+    }
+  
+    navigateToPage(page) {
+      // Send navigation event to Streamlit
+      window.parent.postMessage({
+        type: 'streamlit:setComponentValue',
+        value: {
+          action: 'NAVIGATE',
+          page: page,
+          role: this.role.toLowerCase()  // Ensure lowercase
+        }
+      }, '*');
+      
+      this.updateActiveStates(page);
+    }
+  
+    updateActiveStates(page) {
+      this.currentPage = page;
+      
+      // Update bottom nav
+      document.querySelectorAll('.mobile-nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.page === page);
+      });
+      
+      // Update sidebar nav
+      document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.page === page);
+      });
+    }
+  
+    setActiveStates() {
+      this.updateActiveStates(this.currentPage);
+    }
+  }
+  
+  // Initialize navigation when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new GlobalNavigation();
+    });
+  } else {
+    new GlobalNavigation();
+  }
+  </script>
